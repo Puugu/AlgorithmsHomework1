@@ -18,6 +18,10 @@ int getNumOfNums();
 void genRanNums(const int userNum, string randNumOutputName, ofstream& randNumOutput);
 int getSortSelection(int menuSortSelection);
 bool insertionSort(string randNumInputName);
+bool selectionSort(string randNumInputName);
+bool mergeSort(string randNumInputName);
+bool heapsort(string randNumInputName);
+bool quicksort(string randNumInputName);
 
 int main() {
 
@@ -46,9 +50,19 @@ int main() {
 			cout << "Insertion Sort has been selected.\n\n";
 			//call function for insertion sort
 			fileExists =insertionSort(randNumIOName);
+			//check for successful file location
+			if (fileExists == false) {
+				menuSortSelection = 6;
+			}
 			break;
 		case 2:
 			cout << "Selection Sort has been selected.\n\n";
+			//call function for selection sort
+			fileExists = selectionSort(randNumIOName);
+			//check for successful file location
+			if (fileExists == false) {
+				menuSortSelection = 6;
+			}
 			break;
 		case 3:
 			cout << "Merge Sort has been selected.\n\n";
@@ -215,4 +229,91 @@ bool insertionSort(string randNumInputName) {
 	}
 
 	return fileExists;
+}
+
+bool selectionSort(string randNumInputName) {
+	// this function performs the selection sort and outputs the results in a file
+	//created by Puugu on 22 March 2017
+
+	//declare and initialize variables, etc.
+	bool fileExists = false;
+	int numOfNums = 0;
+	time_t startTime;
+	int minIndex = 0;
+	time_t endTime;
+	float runTime = 0;
+
+	//open input stream
+	ifstream randNumInput(randNumInputName);
+	//check to make sure input file exists
+	if (!randNumInput) {
+		cout << "ERROR: Input file could not be found.\nProgram will now terminate.\n\n";
+		return fileExists = false;
+	}
+	else {
+		fileExists = true;
+	}
+
+	//read first number from file to create array for sorting
+	randNumInput >> numOfNums;
+	//create array for sorting numbers
+	int *sortingArray = new int[numOfNums];
+
+	//populate array with random numbers
+	for (int i = 0; i < numOfNums; i++) {
+		randNumInput >> sortingArray[i];
+	}
+
+	//get start time
+	startTime = time(0);
+
+	//perform selection sort
+	for (int i = 0; i < numOfNums; i++) {
+		minIndex = i;
+		for (int j = i + 1; j < numOfNums; j++) {
+			if (sortingArray[j] < sortingArray[minIndex]) {
+				minIndex = j;
+			}
+		}
+		if (minIndex != i) {
+			swap(sortingArray[minIndex], sortingArray[i]);
+		}
+	}
+
+	//get runtime
+	endTime = time(0);
+	runTime = (endTime - startTime);
+	cout << "Timer: " << runTime << " seconds\nStart time: " << startTime << "\nEnd Time: " << endTime << endl;
+
+	//create output stream
+	ofstream sortedNums("selectionSort.txt");
+
+	//write output for sorted file
+	sortedNums << runTime << " ";
+	for (int i = 0; i < numOfNums; i++) {
+		sortedNums << sortingArray[i] << " ";
+	}
+
+	return fileExists;
+}
+
+bool mergeSort(string randNumInputName) {
+	// this function performs the merge sort and outputs the results in a file
+	//created by Puugu on 22 March 2017
+
+	return true;
+}
+
+bool heapsort(string randNumInputName) {
+	// this function performs the heapsort and outputs the results in a file
+	//created by Puugu on 22 March 2017
+
+	return true;
+}
+
+bool quicksort(string randNumInputName) {
+	// this function performs the quicksort and outputs the results in a file
+	//created by Puugu on 22 March 2017
+
+	return true;
 }
