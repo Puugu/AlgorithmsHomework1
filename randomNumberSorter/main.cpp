@@ -12,15 +12,18 @@ using namespace std;
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <iomanip>
 
 int getNumOfNums();
 void genRanNums(const int userNum, string randNumOutputName, ofstream& randNumOutput);
 int getSortSelection(int menuSortSelection);
+bool insertionSort(string randNumInputName);
 
 int main() {
 
 	//declare and intialize variables, etc.
 	int menuSortSelection = 0;
+	bool fileExists = true;
 
 	//display welcome message
 	cout << "Welcome to Puugu's Random Number Sorter.\n"; 
@@ -29,17 +32,41 @@ int main() {
 	const int userNum = getNumOfNums();
 
 	//generate data file
-	string randNumOutputName = "Data.txt";
+	string randNumIOName = "Data.txt";
 	ofstream randNumOutput;
 
 	//populate datafile with random numbers
-	genRanNums(userNum, randNumOutputName, randNumOutput);
+	genRanNums(userNum, randNumIOName, randNumOutput);
 
 	//get sort selection and sort data
 	do {
 		menuSortSelection = getSortSelection(menuSortSelection);
-		cout << "---------------Menu Selection returned-----------------\n" << menuSortSelection << endl << endl;
-	} while (menuSortSelection != 6);
+		switch (menuSortSelection) {
+		case 1:
+			cout << "Insertion Sort has been selected.\n\n";
+			//call function for insertion sort
+			fileExists =insertionSort(randNumIOName);
+			break;
+		case 2:
+			cout << "Selection Sort has been selected.\n\n";
+			break;
+		case 3:
+			cout << "Merge Sort has been selected.\n\n";
+			break;
+		case 4:
+			cout << "Heapsort has been selected.\n\n";
+			break;
+		case 5:
+			cout << "Quicksort has been selected.\n\n";
+			break;
+		case 6:
+			cout << "Exit has been selected. Program will now terminate.\n\n";
+			break;
+		default:
+			cout << "ERROR: Case " << menuSortSelection << " has not been accounted for. Program will now terminate.\n\n";
+			menuSortSelection = 6;
+		}
+	} while ((menuSortSelection != 6) && (fileExists !=false));
 
 
 	system("pause");
@@ -123,4 +150,69 @@ int getSortSelection(int menuSortSelection) {
 
 	//return menu selection
 	return menuSortSelection;
+}
+
+bool insertionSort(string randNumInputName) {
+	// this function performs the insertion sort and creates file for data output
+	//created by Puugu on 22 March 2017
+
+	//declare and initialize variables, etc.
+	bool fileExists = false;
+	int numOfNums = 0;
+	time_t startTime;
+	time_t endTime;
+	int key = 0;
+	int index = 0;
+	float runTime = 0;
+
+	//open input stream
+	ifstream randNumInput(randNumInputName);
+	//check to make sure input file exists
+	if (!randNumInput) {
+		cout << "ERROR: Input file could not be found.\nProgram will now terminate.\n\n";
+		return fileExists = false;
+	}
+	else {
+		fileExists = true;
+	}
+
+	//read first number from file to create array for sorting
+	randNumInput >> numOfNums;
+	//create array for sorting numbers
+	int *sortingArray = new int[numOfNums];
+
+	//populate array with random numbers
+	for (int i = 0; i < numOfNums; i++) {
+		randNumInput >> sortingArray[i];
+	}
+
+	//get start time
+	startTime = time(0);
+
+	//perform insertion sort
+	for (int i = 1; i < numOfNums; i++) {
+		key = sortingArray[i];
+		index = i - 1;
+		while ((index > 0) && (sortingArray[index] > key)) {
+			sortingArray[index + 1] = sortingArray[index];
+			index--;
+		}
+		sortingArray[index + 1] = key;
+	}
+
+	//get runtime
+	endTime = time(0);
+	runTime = (endTime - startTime);
+	cout << "Timer: " << runTime << " seconds\nStart time: "<<startTime<<"\nEnd Time: "<<endTime<<endl;
+
+	//create output stream
+	ofstream sortedNums("insertionSort.txt");
+
+	//write output for sorted file
+	sortedNums << runTime << " ";
+	for (int i = 0; i < numOfNums; i++) {
+		sortedNums << sortingArray[i] << " ";
+	}
+
+	return fileExists;
 }
