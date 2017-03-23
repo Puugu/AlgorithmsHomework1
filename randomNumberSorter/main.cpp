@@ -20,6 +20,8 @@ int getSortSelection(int menuSortSelection);
 bool insertionSort(string randNumInputName);
 bool selectionSort(string randNumInputName);
 bool mergeSort(string randNumInputName);
+void mergeSorting(int sortingArray[], int firstIndex, int lastIndex);
+void merge(int sortingArray[], int firstIndex, int midPoint, int lastIndex);
 bool heapsort(string randNumInputName);
 bool quicksort(string randNumInputName);
 
@@ -66,6 +68,12 @@ int main() {
 			break;
 		case 3:
 			cout << "Merge Sort has been selected.\n\n";
+			//call function for merge sort
+			fileExists = mergeSort(randNumIOName);
+			//check for successful file location
+			if (fileExists == false) {
+				menuSortSelection = 6;
+			}
 			break;
 		case 4:
 			cout << "Heapsort has been selected.\n\n";
@@ -298,10 +306,108 @@ bool selectionSort(string randNumInputName) {
 }
 
 bool mergeSort(string randNumInputName) {
-	// this function performs the merge sort and outputs the results in a file
+	// this function preps the merge sort and outputs the results in a file
 	//created by Puugu on 22 March 2017
 
-	return true;
+	//declare and initialize variables, etc.
+	bool fileExists = false;
+	int numOfNums = 0;
+	time_t startTime;
+	int minIndex = 0;
+	time_t endTime;
+	float runTime = 0;
+
+	//open input stream
+	ifstream randNumInput(randNumInputName);
+	//check to make sure input file exists
+	if (!randNumInput) {
+		cout << "ERROR: Input file could not be found.\nProgram will now terminate.\n\n";
+		return fileExists = false;
+	}
+	else {
+		fileExists = true;
+	}
+
+	//read first number from file to create array for sorting
+	randNumInput >> numOfNums;
+	//create array for sorting numbers
+	int *sortingArray = new int[numOfNums];
+
+	//populate array with random numbers
+	for (int i = 0; i < numOfNums; i++) {
+		randNumInput >> sortingArray[i];
+	}
+
+	//get start time
+	startTime = time(0);
+
+	//perform merge sort
+	mergeSorting(sortingArray, 1, (numOfNums));
+	
+
+	//get runtime
+	endTime = time(0);
+	runTime = (endTime - startTime);
+	cout << "Timer: " << runTime << " seconds\nStart time: " << startTime << "\nEnd Time: " << endTime << endl;
+
+	//create output stream
+	ofstream sortedNums("mergeSort.txt");
+
+	//write output for sorted file
+	sortedNums << runTime << " ";
+	for (int i = 0; i < numOfNums; i++) {
+		sortedNums << sortingArray[i] << " ";
+	}
+
+	return fileExists;
+}
+
+void mergeSorting(int a[], int p, int r) {
+	// this function divides the array
+	//created by Puugu on 22 March 2017
+
+	int q;
+		if (p < r) {
+			q = (p + r) / 2;
+			mergeSorting(a, p, q);
+			mergeSorting(a, (q + 1), r);
+			merge(a, p, q, r);
+		}
+	
+}
+
+void merge(int a[], int p, int q, int r) {
+	// this function sorts and re-combines the array
+	//created by Puugu on 22 March 2017
+
+	cout << "entered merge";
+
+	int n1 = q - p + 1;
+	int n2 = r - q;	
+	int *L=new int[n1 + 1];
+	int *R=new int[n2 + 1];
+	for (int i = 1; i <= n1; i++) {
+		L[i] = a[p + i - 1];
+		cout << "\nL[" << i << "]: " << L[i];
+	}
+	for (int j = 1; j <= n2; j++) {
+		R[j] = a[q + j];
+		cout << "\nR[" << j << "]: " << R[j];
+	}
+	L[n1 + 1] = 999999;
+	R[n2 + 1] = 999999;
+	int i = 1;
+	int j = 1;
+	for (int k = p; k <= r; k++) {
+		if (L[i] <= R[j]) {
+			a[k] = L[i];
+			i++;
+		}
+		else {
+			a[k] = R[j];
+			j++;
+		}
+	}
 }
 
 bool heapsort(string randNumInputName) {
