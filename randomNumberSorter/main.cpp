@@ -26,6 +26,8 @@ bool heapsort(string randNumInputName);
 void heapSorting(int sortingArray[], int size);
 void heapify(int sortingArray[], int i, int size);
 bool quicksort(string randNumInputName);
+void quicksorting(int sortingArray[], int p, int r);
+int partition(int sortingArray[], int p, int r);
 
 int main() {
 
@@ -88,6 +90,12 @@ int main() {
 			break;
 		case 5:
 			cout << "Quicksort has been selected.\n\n";
+			//call function for quicksort
+			fileExists = quicksort(randNumIOName);
+			//check for successful file location
+			if (fileExists == false) {
+				menuSortSelection = 6;
+			}
 			break;
 		case 6:
 			cout << "Exit has been selected. Program will now terminate.\n\n";
@@ -233,7 +241,6 @@ bool insertionSort(string randNumInputName) {
 	//get runtime
 	endTime = time(0);
 	runTime = (endTime - startTime);
-	cout << "Timer: " << runTime << " seconds\nStart time: "<<startTime<<"\nEnd Time: "<<endTime<<endl;
 
 	//create output stream
 	ofstream sortedNums("insertionSort.txt");
@@ -299,7 +306,6 @@ bool selectionSort(string randNumInputName) {
 	//get runtime
 	endTime = time(0);
 	runTime = (endTime - startTime);
-	cout << "Timer: " << runTime << " seconds\nStart time: " << startTime << "\nEnd Time: " << endTime << endl;
 
 	//create output stream
 	ofstream sortedNums("selectionSort.txt");
@@ -349,13 +355,12 @@ bool mergeSort(string randNumInputName) {
 	startTime = time(0);
 
 	//perform merge sort
-	mergeSorting(sortingArray, 1, (numOfNums));
+	mergeSorting(sortingArray, 1, (numOfNums-1));
 	
 
 	//get runtime
 	endTime = time(0);
 	runTime = (endTime - startTime);
-	cout << "Timer: " << runTime << " seconds\nStart time: " << startTime << "\nEnd Time: " << endTime << endl;
 
 	//create output stream
 	ofstream sortedNums("mergeSort.txt");
@@ -388,19 +393,15 @@ void merge(int a[], int p, int q, int r) {
 	// this function sorts and re-combines the array
 	//created by Puugu on 22 March 2017
 
-	cout << "entered merge";
-
 	int n1 = q - p + 1;
 	int n2 = r - q;	
 	int *L=new int[n1 + 1];
 	int *R=new int[n2 + 1];
 	for (int i = 1; i <= n1; i++) {
 		L[i] = a[p + i - 1];
-		cout << "\nL[" << i << "]: " << L[i];
 	}
 	for (int j = 1; j <= n2; j++) {
 		R[j] = a[q + j];
-		cout << "\nR[" << j << "]: " << R[j];
 	}
 	L[n1 + 1] = 999999;
 	R[n2 + 1] = 999999;
@@ -456,13 +457,12 @@ bool heapsort(string randNumInputName) {
 	startTime = time(0);
 
 	//perform heapsort
-	const size_t size = sizeof(*sortingArray) / sizeof(sortingArray[0]);
+	const size_t size = (sizeof(int)*numOfNums) / sizeof(sortingArray[0]);
 	heapSorting(sortingArray, size);
 
 	//get runtime
 	endTime = time(0);
 	runTime = (endTime - startTime);
-	cout << "Timer: " << runTime << " seconds\nStart time: " << startTime << "\nEnd Time: " << endTime << endl;
 
 	//create output stream
 	ofstream sortedNums("heapsort.txt");
@@ -480,7 +480,6 @@ void heapSorting(int sortingArray[], int size) {
 	//created by Puugu on 22 March 2017
 
 	//heapify
-	cout << "heapsorting\n";
 	for (int i = size / 2; i >= 0; i--) {
 		heapify(sortingArray, i, size);
 	}
@@ -499,7 +498,6 @@ void heapSorting(int sortingArray[], int size) {
 void heapify(int sortingArray[], int i, int size) {
 	//created by Puugu on 22 March 2017
 
-	cout << "heapifying\n";
 	//declare and initialize variables, etc.
 	int child = 0;
 
@@ -515,7 +513,6 @@ void heapify(int sortingArray[], int i, int size) {
 			i = child;
 		}
 		else {
-			cout << "heapified\n";
 			return;
 		}
 	}
@@ -557,12 +554,12 @@ bool quicksort(string randNumInputName) {
 	startTime = time(0);
 
 	//perform quicksort
+	quicksorting(sortingArray, 1, numOfNums-1);
 
 
 	//get runtime
 	endTime = time(0);
 	runTime = (endTime - startTime);
-	cout << "Timer: " << runTime << " seconds\nStart time: " << startTime << "\nEnd Time: " << endTime << endl;
 
 	//create output stream
 	ofstream sortedNums("quicksort.txt");
@@ -574,4 +571,35 @@ bool quicksort(string randNumInputName) {
 	}
 
 	return fileExists;
+}
+
+void quicksorting(int sortingArray[], int p, int r) {
+	//created by Puugu on 22 March 2017
+
+	//declare and intialize variables, etc.
+	int q = 0;
+
+	if (p < r) {
+		q = partition(sortingArray, p, r);
+		quicksorting(sortingArray, p, q - 1);
+		quicksorting(sortingArray, q + 1, r);
+	}
+}
+
+int partition(int sortingArray[], int p, int r) {
+	//created by Puugu on 22 March 2017
+
+	//declare and intialize variables, etc.
+	int x = sortingArray[r];
+	int i = p - 1;
+	
+	for (int j = p; j <= r - 1; j++) {
+		if (sortingArray[j] <= x) {
+			i++;
+			swap(sortingArray[i], sortingArray[j]);
+		}
+	}
+	swap(sortingArray[i + 1], sortingArray[r]);
+
+	return i + 1;
 }
