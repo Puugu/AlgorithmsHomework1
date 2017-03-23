@@ -23,6 +23,8 @@ bool mergeSort(string randNumInputName);
 void mergeSorting(int sortingArray[], int firstIndex, int lastIndex);
 void merge(int sortingArray[], int firstIndex, int midPoint, int lastIndex);
 bool heapsort(string randNumInputName);
+void heapSorting(int sortingArray[], int size);
+void heapify(int sortingArray[], int i, int size);
 bool quicksort(string randNumInputName);
 
 int main() {
@@ -77,6 +79,12 @@ int main() {
 			break;
 		case 4:
 			cout << "Heapsort has been selected.\n\n";
+			//call function for merge sort
+			fileExists = heapsort(randNumIOName);
+			//check for successful file location
+			if (fileExists == false) {
+				menuSortSelection = 6;
+			}
 			break;
 		case 5:
 			cout << "Quicksort has been selected.\n\n";
@@ -313,7 +321,6 @@ bool mergeSort(string randNumInputName) {
 	bool fileExists = false;
 	int numOfNums = 0;
 	time_t startTime;
-	int minIndex = 0;
 	time_t endTime;
 	float runTime = 0;
 
@@ -367,13 +374,14 @@ void mergeSorting(int a[], int p, int r) {
 	//created by Puugu on 22 March 2017
 
 	int q;
-		if (p < r) {
-			q = (p + r) / 2;
-			mergeSorting(a, p, q);
-			mergeSorting(a, (q + 1), r);
-			merge(a, p, q, r);
-		}
-	
+	if (p < r) {
+		q = (p + r) / 2;
+		mergeSorting(a, p, q);
+		mergeSorting(a, (q + 1), r);
+		merge(a, p, q, r);
+	}
+
+	return;
 }
 
 void merge(int a[], int p, int q, int r) {
@@ -408,18 +416,162 @@ void merge(int a[], int p, int q, int r) {
 			j++;
 		}
 	}
+
+	return;
 }
 
 bool heapsort(string randNumInputName) {
 	// this function performs the heapsort and outputs the results in a file
 	//created by Puugu on 22 March 2017
 
-	return true;
+	//declare and initialize variables, etc.
+	bool fileExists = false;
+	int numOfNums = 0;
+	time_t startTime;
+	time_t endTime;
+	float runTime = 0;
+
+	//open input stream
+	ifstream randNumInput(randNumInputName);
+	//check to make sure input file exists
+	if (!randNumInput) {
+		cout << "ERROR: Input file could not be found.\nProgram will now terminate.\n\n";
+		return fileExists = false;
+	}
+	else {
+		fileExists = true;
+	}
+
+	//read first number from file to create array for sorting
+	randNumInput >> numOfNums;
+	//create array for sorting numbers
+	int *sortingArray = new int[numOfNums];
+
+	//populate array with random numbers
+	for (int i = 0; i < numOfNums; i++) {
+		randNumInput >> sortingArray[i];
+	}
+
+	//get start time
+	startTime = time(0);
+
+	//perform heapsort
+	const size_t size = sizeof(*sortingArray) / sizeof(sortingArray[0]);
+	heapSorting(sortingArray, size);
+
+	//get runtime
+	endTime = time(0);
+	runTime = (endTime - startTime);
+	cout << "Timer: " << runTime << " seconds\nStart time: " << startTime << "\nEnd Time: " << endTime << endl;
+
+	//create output stream
+	ofstream sortedNums("heapsort.txt");
+
+	//write output for sorted file
+	sortedNums << runTime << " ";
+	for (int i = 0; i < numOfNums; i++) {
+		sortedNums << sortingArray[i] << " ";
+	}
+
+	return fileExists;
+}
+
+void heapSorting(int sortingArray[], int size) {
+	//created by Puugu on 22 March 2017
+
+	//heapify
+	cout << "heapsorting\n";
+	for (int i = size / 2; i >= 0; i--) {
+		heapify(sortingArray, i, size);
+	}
+
+	while (size - 1 > 0) {
+		//switch root and last element of heap
+		swap(sortingArray[size - 1], sortingArray[0]);
+		//put heap back in max-heap order
+		heapify(sortingArray, 0, size - 1);
+		//decrease size of heap by 1
+		//keeps max value in it's proper place
+		size--;
+	}
+}
+
+void heapify(int sortingArray[], int i, int size) {
+	//created by Puugu on 22 March 2017
+
+	cout << "heapifying\n";
+	//declare and initialize variables, etc.
+	int child = 0;
+
+	while ((i * 2 + 1) < size) {
+		child = i * 2 + 1;
+
+		if ((child + 1 < size) && (sortingArray[child] < sortingArray[child + 1])) {
+			child++;
+		}
+
+		if (sortingArray[i] < sortingArray[child]) {
+			swap(sortingArray[child], sortingArray[i]);
+			i = child;
+		}
+		else {
+			cout << "heapified\n";
+			return;
+		}
+	}
 }
 
 bool quicksort(string randNumInputName) {
 	// this function performs the quicksort and outputs the results in a file
 	//created by Puugu on 22 March 2017
 
-	return true;
+	//declare and initialize variables, etc.
+	bool fileExists = false;
+	int numOfNums = 0;
+	time_t startTime;
+	time_t endTime;
+	float runTime = 0;
+
+	//open input stream
+	ifstream randNumInput(randNumInputName);
+	//check to make sure input file exists
+	if (!randNumInput) {
+		cout << "ERROR: Input file could not be found.\nProgram will now terminate.\n\n";
+		return fileExists = false;
+	}
+	else {
+		fileExists = true;
+	}
+
+	//read first number from file to create array for sorting
+	randNumInput >> numOfNums;
+	//create array for sorting numbers
+	int *sortingArray = new int[numOfNums];
+
+	//populate array with random numbers
+	for (int i = 0; i < numOfNums; i++) {
+		randNumInput >> sortingArray[i];
+	}
+
+	//get start time
+	startTime = time(0);
+
+	//perform quicksort
+
+
+	//get runtime
+	endTime = time(0);
+	runTime = (endTime - startTime);
+	cout << "Timer: " << runTime << " seconds\nStart time: " << startTime << "\nEnd Time: " << endTime << endl;
+
+	//create output stream
+	ofstream sortedNums("quicksort.txt");
+
+	//write output for sorted file
+	sortedNums << runTime << " ";
+	for (int i = 0; i < numOfNums; i++) {
+		sortedNums << sortingArray[i] << " ";
+	}
+
+	return fileExists;
 }
