@@ -224,6 +224,9 @@ bool insertionSort(string randNumInputName) {
 		randNumInput >> sortingArray[i];
 	}
 
+	//close input file
+	randNumInput.close();
+
 	//get start time
 	startTime = time(0);
 
@@ -250,6 +253,12 @@ bool insertionSort(string randNumInputName) {
 	for (int i = 0; i < numOfNums; i++) {
 		sortedNums << sortingArray[i] << " ";
 	}
+
+	//delete sorting array
+	delete sortingArray;
+
+	//close output file
+	sortedNums.close();
 
 	return fileExists;
 }
@@ -287,6 +296,9 @@ bool selectionSort(string randNumInputName) {
 		randNumInput >> sortingArray[i];
 	}
 
+	//close input file
+	randNumInput.close();
+
 	//get start time
 	startTime = time(0);
 
@@ -315,6 +327,12 @@ bool selectionSort(string randNumInputName) {
 	for (int i = 0; i < numOfNums; i++) {
 		sortedNums << sortingArray[i] << " ";
 	}
+
+	//delete sorting array
+	delete sortingArray;
+
+	//close output file
+	sortedNums.close();
 
 	return fileExists;
 }
@@ -351,6 +369,9 @@ bool mergeSort(string randNumInputName) {
 		randNumInput >> sortingArray[i];
 	}
 
+	//close input file
+	randNumInput.close();
+
 	//get start time
 	startTime = time(0);
 
@@ -370,6 +391,12 @@ bool mergeSort(string randNumInputName) {
 	for (int i = 0; i < numOfNums; i++) {
 		sortedNums << sortingArray[i] << " ";
 	}
+
+	//delete sorting array
+	delete sortingArray;
+
+	//close output file
+	sortedNums.close();
 
 	return fileExists;
 }
@@ -453,6 +480,8 @@ bool heapsort(string randNumInputName) {
 		randNumInput >> sortingArray[i];
 	}
 
+	randNumInput.close();
+
 	//get start time
 	startTime = time(0);
 
@@ -472,6 +501,12 @@ bool heapsort(string randNumInputName) {
 	for (int i = 0; i < numOfNums; i++) {
 		sortedNums << sortingArray[i] << " ";
 	}
+
+	//delete sorting array
+	delete sortingArray;
+
+	//close output file
+	sortedNums.close();
 
 	return fileExists;
 }
@@ -550,6 +585,9 @@ bool quicksort(string randNumInputName) {
 		randNumInput >> sortingArray[i];
 	}
 
+	//close input file
+	randNumInput.close();
+
 	//get start time
 	startTime = time(0);
 
@@ -569,6 +607,12 @@ bool quicksort(string randNumInputName) {
 	for (int i = 0; i < numOfNums; i++) {
 		sortedNums << sortingArray[i] << " ";
 	}
+
+	//delete sorting array
+	delete sortingArray;
+
+	//close output file
+	sortedNums.close();
 
 	return fileExists;
 }
