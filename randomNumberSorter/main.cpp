@@ -58,7 +58,7 @@ int main() {
 			fileExists =insertionSort(randNumIOName);
 			//check for successful file location
 			if (fileExists == false) {
-				menuSortSelection = 6;
+				menuSortSelection = 7;
 			}
 			break;
 		case 2:
@@ -67,7 +67,7 @@ int main() {
 			fileExists = selectionSort(randNumIOName);
 			//check for successful file location
 			if (fileExists == false) {
-				menuSortSelection = 6;
+				menuSortSelection = 7;
 			}
 			break;
 		case 3:
@@ -76,7 +76,7 @@ int main() {
 			fileExists = mergeSort(randNumIOName);
 			//check for successful file location
 			if (fileExists == false) {
-				menuSortSelection = 6;
+				menuSortSelection = 7;
 			}
 			break;
 		case 4:
@@ -85,7 +85,7 @@ int main() {
 			fileExists = heapsort(randNumIOName);
 			//check for successful file location
 			if (fileExists == false) {
-				menuSortSelection = 6;
+				menuSortSelection = 7;
 			}
 			break;
 		case 5:
@@ -94,17 +94,31 @@ int main() {
 			fileExists = quicksort(randNumIOName);
 			//check for successful file location
 			if (fileExists == false) {
-				menuSortSelection = 6;
+				menuSortSelection = 7;
 			}
 			break;
 		case 6:
+			cout << "All sorts have been selected.\n\n";
+			//call functions for each sort
+			fileExists = insertionSort(randNumIOName);
+			//check for successful file location
+			if (fileExists == false) {
+				menuSortSelection = 7;
+				break;
+			}
+			fileExists = selectionSort(randNumIOName);
+			fileExists = mergeSort(randNumIOName);
+			fileExists = heapsort(randNumIOName);
+			fileExists = quicksort(randNumIOName);
+			break;
+		case 7:
 			cout << "Exit has been selected. Program will now terminate.\n\n";
 			break;
 		default:
 			cout << "ERROR: Case " << menuSortSelection << " has not been accounted for. Program will now terminate.\n\n";
-			menuSortSelection = 6;
+			menuSortSelection = 7;
 		}
-	} while ((menuSortSelection != 6) && (fileExists !=false));
+	} while ((menuSortSelection != 7) && (fileExists !=false));
 
 
 	system("pause");
@@ -170,12 +184,12 @@ int getSortSelection(int menuSortSelection) {
 
 	//prompt user to select type of sort
 	cout << "What type of sort would you like to perform?\n";
-	cout << "1. Insertion Sort\n2. Selection Sort\n3. Merge Sort\n4. Heapsort\n5. Quicksort\n6. Exit\n";
+	cout << "1. Insertion Sort\n2. Selection Sort\n3. Merge Sort\n4. Heapsort\n5. Quicksort\n6. All of the above\n7. Exit\n";
 	cout << "Please enter the number of your selection: ";
 	cin >> menuSortSelection;
 	cout << endl;
 	//validate input
-	while ((!cin) || (menuSortSelection<1) || (menuSortSelection>6)) {
+	while ((!cin) || (menuSortSelection<1) || (menuSortSelection>7)) {
 		//clear error
 		cin.clear();
 		//flush input buffer
